@@ -1,7 +1,7 @@
 <?php
 $id = 'dhbwautoloui';
-$version = '1.0.0';
-$ilias_min_version = "8.0";
-$ilias_max_version = "8.999";
-$responsible = "fluxlabs ag";
-$responsible_mail = "support@fluxlabs.ch";
+$version = '1.2.0';
+$ilias_min_version = "9.0";
+$ilias_max_version = "9.999";
+$responsible = "Kröpelin Projekt GmbH";
+$responsible_mail = "info@kroepelin-projekte.de";
