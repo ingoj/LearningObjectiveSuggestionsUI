@@ -1,4 +1,5 @@
 <?php
+
 $id = 'dhbwautoloui';
 $version = '1.2.0';
 $ilias_min_version = "9.0";

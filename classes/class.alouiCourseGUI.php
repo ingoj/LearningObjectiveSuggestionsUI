@@ -16,8 +16,6 @@ use SRAG\ILIAS\Plugins\LearningObjectiveSuggestionsUI\SuggestionsSendFormGUI;
 use SRAG\ILIAS\Plugins\LearningObjectiveSuggestionsUI\SuggestionsTableGUI;
 use SRAG\ILIAS\Plugins\LearningObjectiveSuggestions\Suggestion\LearningObjectiveSuggestions;
 
-require_once __DIR__ . "/../vendor/autoload.php";
-
 /**
  * Class alouiCourseGUI
  *
@@ -27,17 +25,16 @@ require_once __DIR__ . "/../vendor/autoload.php";
  */
 class alouiCourseGUI
 {
-
-    const CMD_APPLY_FILTER = 'applyFilter';
-    const CMD_CANCEL = "cancel";
-    const CMD_EDIT_SEND_NOTIFICATION = "editSendNotification";
-    const CMD_EDIT_SUGGESTIONS = "editSuggestions";
-    const CMD_INDEX = "index";
-    const CMD_RESET_FILTER = 'resetFilter';
-    const CMD_SAVE_SUGGESTIONS = "saveSuggestions";
-    const CMD_SEND_NOTIFICATION = 'sendNotification';
-    const CMD_DEACTIVATE_CRON = "deactivateCron";
-    const CMD_ACTIVATE_CRON = "activateCron";
+    public const CMD_APPLY_FILTER = 'applyFilter';
+    public const CMD_CANCEL = "cancel";
+    public const CMD_EDIT_SEND_NOTIFICATION = "editSendNotification";
+    public const CMD_EDIT_SUGGESTIONS = "editSuggestions";
+    public const CMD_INDEX = "index";
+    public const CMD_RESET_FILTER = 'resetFilter';
+    public const CMD_SAVE_SUGGESTIONS = "saveSuggestions";
+    public const CMD_SEND_NOTIFICATION = 'sendNotification';
+    public const CMD_DEACTIVATE_CRON = "deactivateCron";
+    public const CMD_ACTIVATE_CRON = "activateCron";
     protected ilCtrl|ilCtrlInterface $ctrl;
     protected ilLanguage $lng;
     protected ilTemplate|ilGlobalTemplateInterface $tpl;
@@ -69,10 +66,10 @@ class alouiCourseGUI
     public function executeCommand(): void
     {
         if (!$this->checkAccess()) {
-            $this->tpl->setOnScreenMessage('failure',$this->pl->txt('permission_denied'), true);
+            $this->tpl->setOnScreenMessage('failure', $this->pl->txt('permission_denied'), true);
             $this->ctrl->redirectByClass(ilDashboardGUI::class);
         }
-        $this->course = new ilObjCourse((int)$_GET['ref_id']);
+        $this->course = new ilObjCourse((int) $_GET['ref_id']);
         $this->initCourseHeader();
         $cmd = $this->ctrl->getCmd(self::CMD_INDEX);
         $this->ctrl->saveParameter($this, 'ref_id');
@@ -110,12 +107,12 @@ class alouiCourseGUI
     protected function editSendNotification(): void
     {
         $this->ctrl->saveParameter($this, 'user_id');
-        $user = new User(new ilObjUser((int)$_GET['user_id']));
+        $user = new User(new ilObjUser((int) $_GET['user_id']));
         $form = new SuggestionsSendFormGUI(new LearningObjectiveCourse($this->course), $user, new TwigParser());
         $form->setFormAction($this->ctrl->getFormAction($this));
         $this->tpl->setContent($form->getHTML());
         if ($this->getNotification($user->getId())) {
-            $this->tpl->setOnScreenMessage('info',$this->pl->txt('suggestions_already_sent'), true);
+            $this->tpl->setOnScreenMessage('info', $this->pl->txt('suggestions_already_sent'), true);
         }
     }
 
@@ -125,7 +122,7 @@ class alouiCourseGUI
     protected function sendNotification(): void
     {
         $this->ctrl->saveParameter($this, 'user_id');
-        $user = new User(new ilObjUser((int)$_GET['user_id']));
+        $user = new User(new ilObjUser((int) $_GET['user_id']));
         $course = new LearningObjectiveCourse($this->course);
         $form = new SuggestionsSendFormGUI($course, $user, new TwigParser());
         $form->setFormAction($this->ctrl->getFormAction($this));
@@ -133,10 +130,10 @@ class alouiCourseGUI
             $sender = new Sender($course, $user, new Log());
             $sender->subject($form->getInput('subject'))->body($form->getInput('body'));
             if ($sender->send()) {
-                $this->tpl->setOnScreenMessage('success',$this->pl->txt('suggestions_sent'), true);
+                $this->tpl->setOnScreenMessage('success', $this->pl->txt('suggestions_sent'), true);
                 $this->ctrl->redirect($this);
             }
-            $this->tpl->setOnScreenMessage('failure',$this->pl->txt('send_suggestions_failed'), true);
+            $this->tpl->setOnScreenMessage('failure', $this->pl->txt('send_suggestions_failed'), true);
         }
         $form->setValuesByPost();
         $this->tpl->setContent($form->getHTML());
@@ -148,7 +145,7 @@ class alouiCourseGUI
     protected function saveSuggestions(): void
     {
         $this->ctrl->saveParameter($this, 'user_id');
-        $user = new User(new ilObjUser((int)$_GET['user_id']));
+        $user = new User(new ilObjUser((int) $_GET['user_id']));
         $course = new LearningObjectiveCourse($this->course);
         $query = new LearningObjectiveQuery(new CourseConfigProvider($course));
         $form = new SuggestionsFormGUI($course, $user, $query);
@@ -159,7 +156,7 @@ class alouiCourseGUI
                 return $query->getByObjectiveId($objective_id);
             }, $form->getInput('suggestions'));
             $modifier->replaceSuggestions($objectives);
-            $this->tpl->setOnScreenMessage('success',$this->pl->txt('saved_suggestions'), true);
+            $this->tpl->setOnScreenMessage('success', $this->pl->txt('saved_suggestions'), true);
             $this->ctrl->redirect($this);
         }
         $form->setValuesByPost();
@@ -172,7 +169,7 @@ class alouiCourseGUI
     protected function editSuggestions(): void
     {
         $this->ctrl->saveParameter($this, 'user_id');
-        $user = new User(new ilObjUser((int)$_GET['user_id']));
+        $user = new User(new ilObjUser((int) $_GET['user_id']));
         $course = new LearningObjectiveCourse($this->course);
         $query = new LearningObjectiveQuery(new CourseConfigProvider($course));
         $form = new SuggestionsFormGUI($course, $user, $query);
@@ -186,12 +183,12 @@ class alouiCourseGUI
     protected function activateCron(): void
     {
         $this->ctrl->saveParameter($this, 'user_id');
-        $user = new User(new ilObjUser((int)$_GET['user_id']));
+        $user = new User(new ilObjUser((int) $_GET['user_id']));
         $course = new LearningObjectiveCourse($this->course);
 
         $learning_objective_suggestions = new LearningObjectiveSuggestions($course, $user);
         $learning_objective_suggestions->setCronActive();
-        $this->tpl->setOnScreenMessage('success',$this->pl->txt('saved_suggestions'), true);
+        $this->tpl->setOnScreenMessage('success', $this->pl->txt('saved_suggestions'), true);
         $this->ctrl->redirect($this);
 
     }
@@ -202,12 +199,12 @@ class alouiCourseGUI
     protected function deactivateCron(): void
     {
         $this->ctrl->saveParameter($this, 'user_id');
-        $user = new User(new ilObjUser((int)$_GET['user_id']));
+        $user = new User(new ilObjUser((int) $_GET['user_id']));
         $course = new LearningObjectiveCourse($this->course);
 
         $learning_objective_suggestions = new LearningObjectiveSuggestions($course, $user);
         $learning_objective_suggestions->setCronInactive();
-        $this->tpl->setOnScreenMessage('success',$this->pl->txt('saved_suggestions'), true);
+        $this->tpl->setOnScreenMessage('success', $this->pl->txt('saved_suggestions'), true);
         $this->ctrl->redirect($this);
     }
     protected function cancel(): void
@@ -225,13 +222,13 @@ class alouiCourseGUI
         $this->tpl->setTitle($this->course->getPresentationTitle());
         $this->tpl->setDescription($this->course->getLongDescription());
         $this->tpl->setTitleIcon(ilObject::_getIcon($this->course->getId(), "big", $this->course->getType()), $this->lng->txt("obj_" . $this->course->getType()));
-        $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', (int)$_GET['ref_id']);
+        $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', (int) $_GET['ref_id']);
         $this->tabs->setBackTarget($this->pl->txt("back_to_course"), $this->ctrl->getLinkTargetByClass(array(
             ilRepositoryGUI::class,
             ilObjCourseGUI::class
         )));
         $lgui = ilObjectListGUIFactory::_getListGUIByType($this->course->getType());
-        $lgui->initItem((int)$_GET['ref_id'], $this->course->getId(), false);
+        $lgui->initItem((int) $_GET['ref_id'], $this->course->getId(), false);
         $this->tpl->setAlertProperties($lgui->getAlertProperties());
         $this->locator->addRepositoryItems();
         $this->tpl->setLocator();
@@ -245,6 +242,6 @@ class alouiCourseGUI
     }
     protected function checkAccess(): bool
     {
-        return $this->access->checkAccess('write', '', (int)$_GET['ref_id']);
+        return $this->access->checkAccess('write', '', (int) $_GET['ref_id']);
     }
 }
