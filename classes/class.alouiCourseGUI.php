@@ -233,7 +233,7 @@ class alouiCourseGUI
         $this->locator->addRepositoryItems();
         $this->tpl->setLocator();
     }
-    protected function getNotification(int $user_id): Notification|ActiveRecord
+    protected function getNotification(int $user_id): Notification|ActiveRecord|null
     {
         return Notification::where(array(
             'user_id' => $user_id,
