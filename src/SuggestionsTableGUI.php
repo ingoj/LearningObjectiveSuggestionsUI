@@ -182,6 +182,7 @@ class SuggestionsTableGUI extends \ilTable2GUI
                 $list->addItem($this->pl->txt('activate_cron'), '', $this->ctrl->getLinkTarget($this->parent_obj, \alouiCourseGUI::CMD_ACTIVATE_CRON));
                 break;
         }
+        $list->addItem($this->pl->txt('learning_suggestions_generate'), '', $this->ctrl->getLinkTarget($this->parent_obj, \alouiCourseGUI::CMD_LEARNING_SUGGESTIONS_GENERATE));
 
         $this->ctrl->clearParameters($this->parent_obj);
         $list->setListTitle($this->pl->txt('actions'));

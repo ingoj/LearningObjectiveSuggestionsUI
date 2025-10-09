@@ -26,23 +26,43 @@ use SRAG\ILIAS\Plugins\LearningObjectiveSuggestions\Suggestion\LearningObjective
 class alouiCourseGUI
 {
     public const CMD_APPLY_FILTER = 'applyFilter';
+
     public const CMD_CANCEL = "cancel";
+
     public const CMD_EDIT_SEND_NOTIFICATION = "editSendNotification";
+
     public const CMD_EDIT_SUGGESTIONS = "editSuggestions";
+
     public const CMD_INDEX = "index";
+
     public const CMD_RESET_FILTER = 'resetFilter';
+
     public const CMD_SAVE_SUGGESTIONS = "saveSuggestions";
+
     public const CMD_SEND_NOTIFICATION = 'sendNotification';
+
     public const CMD_DEACTIVATE_CRON = "deactivateCron";
+
     public const CMD_ACTIVATE_CRON = "activateCron";
+
+    public const CMD_LEARNING_SUGGESTIONS_GENERATE = "learningSuggestionsGenerate";
+
     protected ilCtrl|ilCtrlInterface $ctrl;
+
     protected ilLanguage $lng;
+
     protected ilTemplate|ilGlobalTemplateInterface $tpl;
+
     protected ilObjCourse $course;
+
     protected ilTabsGUI $tabs;
+
     protected ilAccessHandler $access;
+
     protected ilObjUser $usr;
+
     protected mixed $locator;
+
     protected ilLearningObjectiveSuggestionsUIPlugin $pl;
 
 
@@ -190,7 +210,6 @@ class alouiCourseGUI
         $learning_objective_suggestions->setCronActive();
         $this->tpl->setOnScreenMessage('success', $this->pl->txt('saved_suggestions'), true);
         $this->ctrl->redirect($this);
-
     }
 
     /**
@@ -207,6 +226,28 @@ class alouiCourseGUI
         $this->tpl->setOnScreenMessage('success', $this->pl->txt('saved_suggestions'), true);
         $this->ctrl->redirect($this);
     }
+
+    /**
+     * @return void
+     * @throws ilCtrlException
+     */
+    protected function learningSuggestionsGenerate(): void
+    {
+        $this->ctrl->saveParameter($this, 'user_id');
+        $user = new User(new ilObjUser((int) $_GET['user_id']));
+        $course = new LearningObjectiveCourse($this->course);
+
+
+        //$test = new ilLearningObjectiveSuggestionsPlugin();
+
+
+        // TODO start calculation and send notification
+        dd("OK");
+
+        $this->tpl->setOnScreenMessage('success', $this->pl->txt('saved_suggestions'), true);
+        $this->ctrl->redirect($this);
+    }
+
     protected function cancel(): void
     {
         $this->index();
