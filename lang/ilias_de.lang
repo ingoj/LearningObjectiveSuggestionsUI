@@ -27,3 +27,4 @@ suggestions_sent#:#Die Lernziel Empfehlungen wurden an den Benutzer und Betreuer
 cron#:#Berechnung
 deactivate_cron#:#Berechnung deaktivieren
 activate_cron#:#Berechnung aktivieren
+learning_suggestions_generate#:#Lernempfehlungen Generieren
